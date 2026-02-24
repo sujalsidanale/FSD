@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Universities Finder</title>
+
+<style>
+*{
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body{
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 40px;
+    color: #333;
+}
+
+/* Main Card */
+.container{
+    max-width: 1000px;
+    margin: auto;
+    background: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Title */
+h2{
+    text-align: center;
+    margin-bottom: 20px;
+    color: #4a4a4a;
+}
+
+/* Input Box */
+.input-box{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input{
+    padding: 10px;
+    width: 300px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+}
+
+/* Button */
+button{
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #667eea;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover{
+    background: #5a67d8;
+}
+
+/* Table Styling */
+table{
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th{
+    background: #667eea;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td{
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover{
+    background: #f3f4ff;
+}
+
+/* Links */
+a{
+    color: #667eea;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+</style>
+
+<script>
+function loadUniversities()
+{
+    let country = document.getElementById("country").value;
+    let xhr = new XMLHttpRequest();
+    let url = "http://universities.hipolabs.com/search?country=" + country;
+
+    xhr.open("GET", url, true);
+
+    xhr.onreadystatechange = function()
+    {
+        if(xhr.readyState == 4 && xhr.status == 200)
+        {
+            let data = JSON.parse(xhr.responseText);
+            let table = "<table>";
+            table += "<tr><th>University Name</th><th>State / Province</th><th>Website</th></tr>";
+
+            for(let i=0; i<data.length; i++)
+            {
+                table += "<tr>";
+                table += "<td>" + data[i].name + "</td>";
+                table += "<td>" + (data[i]["state-province"] || "-") + "</td>";
+                table += "<td><a href='" + data[i].web_pages[0] + "' target='_blank'>Visit</a></td>";
+                table += "</tr>";
+            }
+
+            table += "</table>";
+            document.getElementById("output").innerHTML = table;
+        }
+    };
+
+    xhr.send();
+}
+</script>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Universities Finder</h2>
+
+    <div class="input-box">
+        <input type="text" id="country" placeholder="Enter Country Name (e.g. India)">
+        <button onclick="loadUniversities()">Search</button>
+    </div>
+
+    <div id="output"></div>
+</div>
+
+</body>
+</html>

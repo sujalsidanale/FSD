@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub Repositories</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #1d2671, #c33764);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 85%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        input {
+            padding: 8px;
+            width: 250px;
+            border-radius: 5px;
+            border: 1px solid #aaa;
+        }
+
+        button {
+            padding: 9px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1d2671;
+            color: white;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        button:hover {
+            background-color: #c33764;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #1d2671;
+            color: white;
+        }
+
+        a {
+            text-decoration: none;
+            color: #1d2671;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>GitHub Repositories</h2>
+
+    <center>
+        <input type="text" id="username" placeholder="Enter GitHub Username">
+        <button onclick="getRepos()">Get Repositories</button>
+    </center>
+
+    <table id="repoTable">
+        <thead>
+            <tr>
+                <th>Repository Name</th>
+                <th>Description</th>
+                <th>URL</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+function getRepos() {
+    var username = document.getElementById("username").value;
+    var url = "https://api.github.com/users/" + username + "/repos";
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+
+    xhr.onload = function () {
+        if (xhr.status == 200) {
+            var repos = JSON.parse(xhr.responseText);
+            var tbody = document.querySelector("#repoTable tbody");
+            tbody.innerHTML = "";
+
+            repos.forEach(function(repo) {
+                var row = "<tr>" +
+                          "<td>" + repo.name + "</td>" +
+                          "<td>" + (repo.description || "N/A") + "</td>" +
+                          "<td><a href='" + repo.html_url + "' target='_blank'>View</a></td>" +
+                          "</tr>";
+                tbody.innerHTML += row;
+            });
+        } else {
+            alert("User not found!");
+        }
+    };
+    xhr.send();
+}
+</script>
+
+</body>
+</html>
