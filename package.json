@@ -1,0 +1,12 @@
+{
+  "name": "student-information-server",
+  "version": "1.0.0",
+  "description": "Student Information Web Server using Node.js Core HTTP Module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
